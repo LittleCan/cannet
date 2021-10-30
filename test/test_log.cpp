@@ -2,6 +2,6 @@
 #include <iostream>
 
 int main(){
-    std::cout << cannet::Logger::getLogFileName();
+    std::cout << "abcd";
     return 0;
 }
