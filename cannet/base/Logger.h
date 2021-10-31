@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <string>
 #include <memory>
+#include <list>
 
 namespace cannet
 {
@@ -28,10 +29,12 @@ namespace cannet
         typedef std::shared_ptr<LogEvent> ptr;
 
     private:
-        const char *m_file = nullptr;
         int32_t m_line = 0;
         uint32_t m_threadId = 0;
-        uint32_t m_time;
+        uint64_t m_time = 0;
+        uint32_t m_fiberId = 0;
+        uint64_t m_elapse = 0;
+        const char *m_file = nullptr;
         std::string m_content;
     };
 
@@ -59,20 +62,31 @@ namespace cannet
         ~Logger() = default;
         typedef std::shared_ptr<Logger> ptr;
 
-        void log(LogLevel::Level level, const LogEvent &event);
+        void log(LogLevel::Level level, LogEvent::ptr event);
+
+        void debug(LogEvent::ptr event);
+        void infor(LogEvent::ptr event);
+        void warn(LogEvent::ptr event);
+        void error(LogEvent::ptr event);
+        void fatal(LogEvent::ptr event);
+
+        void addAppender(LogAppender::ptr appender);
+        void delAppender(LogAppender::ptr appender);
+        LogLevel::Level getLevel() const { return m_level; };
+        void setLevel(LogLevel::Level val) { m_level = val; };
 
     private:
         std::string m_name;
-        LogAppender::ptr m_appender;
+        std::list<LogAppender::ptr> m_appenders;
         LogLevel::Level m_level;
     };
 
-    class StdoutLogAppender: public LogAppender{
-
+    class StdoutLogAppender : public LogAppender
+    {
     };
 
-    class FileLogAppender: public LogAppender{
-
+    class FileLogAppender : public LogAppender
+    {
     };
 
 }
