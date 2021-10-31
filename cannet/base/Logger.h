@@ -7,6 +7,8 @@
 #include <string>
 #include <memory>
 #include <list>
+#include <fstream>
+#include <sstream>
 
 namespace cannet
 {
@@ -47,12 +49,15 @@ namespace cannet
     class LogAppender
     {
     public:
-        virtual ~LogAppender(){};
         typedef std::shared_ptr<LogAppender> ptr;
-        void log(LogLevel::Level level, LogEvent::ptr event);
+        virtual ~LogAppender(){};
+        virtual void log(LogLevel::Level level, LogEvent::ptr event) = 0;
+        void setFormatter(LogFormatter::ptr val) { m_formatter = val; };
+        LogFormatter::ptr getFormatter() const { return m_formatter; };
 
-    private:
+    protected:
         LogLevel::Level m_level;
+        LogFormatter::ptr m_formatter;
     };
 
     class Logger
@@ -83,10 +88,22 @@ namespace cannet
 
     class StdoutLogAppender : public LogAppender
     {
+    public:
+        std::shared_ptr<StdoutLogAppender> ptr;
+        void log(LogLevel::Level level, LogEvent::ptr event) override;
     };
 
     class FileLogAppender : public LogAppender
     {
+    public:
+        std::shared_ptr<FileLogAppender> ptr;
+        void log(LogLevel::Level level, LogEvent::ptr event) override;
+        FileLogAppender(const std::string &filename);
+        bool reopen();
+
+    private:
+        std::string m_name;
+        std::ofstream m_fileStream;
     };
 
 }
