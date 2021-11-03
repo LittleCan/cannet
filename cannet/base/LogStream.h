@@ -54,6 +54,10 @@ namespace cannet {
             cur_ += len;
         }
 
+        void reset() {
+            cur_ = data_;
+        }
+
         void resetData() {
             memset(data_, 0, sizeof(data_));
         }

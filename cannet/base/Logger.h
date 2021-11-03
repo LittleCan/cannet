@@ -9,13 +9,16 @@
 #include "LogStream.h"
 #include <ctime>
 #include "sys/time.h"
+#include <pthread.h>
 
 namespace cannet {
     class Logger {
     private:
         class Impl {
         public:
-            Impl(const char *fileName, int line) : stream_(), line_(line), basename_(fileName) {};
+            Impl(const char *fileName, int line) : stream_(), line_(line), basename_(fileName) {
+                formatTime();
+            };
 
             ~Impl() = default;
 
@@ -31,16 +34,11 @@ namespace cannet {
     public:
         Logger(const char *filename, int line) : impl_(filename, line) {};
 
-        ~Logger() {
-            impl_.stream_ << " -- " << impl_.basename_ << ':' << impl_.line_ << '\n';
-            std::cout << stream().buffer().data();
-        };
+        ~Logger();
 
         LogStream &stream() {
             return impl_.stream_;
         }
-
-        void m_time() { impl_.formatTime(); }
 
         static void setLogFileName(std::string filename) {
             logFileName_ = std::move(filename);
@@ -51,6 +49,10 @@ namespace cannet {
         }
     };
 
+    void once_init();
+
+    void output(const char *msg, int len);
+
 }
-#define LOG Logger(__FILE__,__LINE__).stream()
+#define LOG cannet::Logger(__FILE__,__LINE__).stream()
 #endif
