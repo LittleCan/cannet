@@ -8,4 +8,7 @@
 4. git commit -m  提交到版本库
 5. git branch -M 修改分支名字
 6. git push -u origin main 推送分支到远程
+7. git branch 查看分支
+8. git checkout -b 新建并切换分支
+9. git reset 撤回commit
 

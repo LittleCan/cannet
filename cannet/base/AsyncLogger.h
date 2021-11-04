@@ -28,7 +28,7 @@ namespace cannet {
         }
         void stop(){
             running_ = false;
-            cond_.notify_all();
+            cond_.notify_one();
             thread_.join();
         }
 
