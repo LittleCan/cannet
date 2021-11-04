@@ -2,6 +2,8 @@
 #define CANNET_CURRENTTHREAD_H
 
 #include <cstdint>
+#include <sys/syscall.h>
+#include <unistd.h>
 
 namespace cannet {
     extern __thread int t_cachedTid;
@@ -9,7 +11,16 @@ namespace cannet {
     extern __thread int t_tidStringLength;
     extern __thread const char *t_threadName;
 
-    void cacheTid();
+    pid_t getTid() {
+        return static_cast<pid_t>(::syscall(SYS_gettid));
+    }
+
+    void cacheTid() {
+        if (t_cachedTid == 0) {
+            t_cachedTid = getTid();
+            t_tidStringLength = snprintf(t_tidString, sizeof(t_tidString), "%5d", t_cachedTid);
+        }
+    }
 
     inline int tid() {
         if (__builtin_expect(t_cachedTid == 0, 0)) { cacheTid(); }

@@ -1,5 +1,5 @@
 #include "Logger.h"
-#include "Thread.h"
+#include "ThreadStd.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -15,9 +15,9 @@ void threadFuncTest() {
 }
 
 void multiThreadFuncTest(int threadNum = 4) {
-    std::vector<std::shared_ptr<cannet::Thread>> v;
+    std::vector<std::shared_ptr<cannet::ThreadStd>> v;
     for (int i = 0; i < threadNum; ++i) {
-        auto temp = std::make_shared<cannet::Thread>(threadFuncTest, "testFunc");
+        auto temp = std::make_shared<cannet::ThreadStd>(threadFuncTest);
         v.push_back(temp);
     }
     for (const auto &i: v) {

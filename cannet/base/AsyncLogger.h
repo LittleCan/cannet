@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include "LogStream.h"
-#include "Thread.h"
+#include "ThreadStd.h"
 #include "CountDownLatch.h"
 #include "LogFile.h"
 
@@ -41,7 +41,7 @@ namespace cannet {
         const int flushInterval_;
         bool running_;
         std::string basename_;
-        Thread thread_;
+        ThreadStd thread_;
         std::mutex mutex_;
         std::condition_variable cond_;
         BufferPtr currentBuffer_;

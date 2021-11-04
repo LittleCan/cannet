@@ -3,7 +3,7 @@
 namespace cannet {
     AsyncLogger::AsyncLogger(const std::string basename, int flushInterval) :
             flushInterval_(flushInterval), running_(false), basename_(basename),
-            thread_(std::bind(&AsyncLogger::threadFun, this), "Logging"),
+            thread_(std::bind(&AsyncLogger::threadFun, this)),
             currentBuffer_(new Buffer), nextBuffer_(new Buffer), buffers_(), latch_(1) {
         assert(basename_.size() > 1);
         currentBuffer_->resetData();
@@ -23,7 +23,7 @@ namespace cannet {
             else
                 currentBuffer_.reset(new Buffer);
             currentBuffer_->append(logline, len);
-            cond_.notify_all();
+            cond_.notify_one();
         }
     }
 
