@@ -9,6 +9,7 @@
 #include <atomic>
 #include <map>
 #include "Noncopyable.h"
+#include "EventBase.h"
 
 namespace cannet {
     const int kMaxEvents = 2000;
