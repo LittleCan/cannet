@@ -15,9 +15,9 @@ namespace cannet {
 
         Slice(const char *d, size_t n) : pb_(d), pe_(d + n) {}
 
-        explicit Slice(const std::string &s) : pb_(s.data()), pe_(s.data() + s.size()) {}
+        Slice(const std::string &s) : pb_(s.data()), pe_(s.data() + s.size()) {}
 
-        explicit Slice(const char *s) : pb_(s), pe_(s + strlen(s)) {}
+        Slice(const char *s) : pb_(s), pe_(s + strlen(s)) {}
 
         const char *data() const { return pb_; }
 
@@ -147,7 +147,6 @@ namespace cannet {
             r.emplace_back(pb, pe_);
         return r;
     }
-
 }
 
 #endif //CANNET_SLICE_H

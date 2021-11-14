@@ -11,15 +11,24 @@
 #include <list>
 #include <fcntl.h>
 #include "Net.h"
-#include "set"
+#include <set>
+//#include "Conn.h"
 
 namespace cannet {
-    struct Channel;
-    struct TcpConn;
-    struct TcpServer;
-    struct IdleIdImp;
-    struct EventsImp;
-    struct EventBase;
+    class Channel;
+
+    class TcpConn;
+
+    class TcpServer;
+
+    class IdleIdImp;
+
+    class EventsImp;
+
+    class EventBase;
+
+    class PollerBase;
+
     typedef std::unique_ptr<IdleIdImp> IdleId;
     typedef std::pair<int64_t, int64_t> TimerId;
 
@@ -44,10 +53,7 @@ namespace cannet {
         }
     };
 
-    typedef std::shared_ptr<TcpConn> TcpConnPtr;
-    typedef std::shared_ptr<TcpServer> TcpServerPtr;
-    typedef std::function<void(const TcpConnPtr &)> TcpCallBack;
-    typedef std::function<void(const TcpConnPtr &, Slice msg)> MsgCallBack;
+
 
     class EventBases : private noncopyable {
     public:

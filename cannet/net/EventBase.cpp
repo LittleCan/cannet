@@ -1,21 +1,26 @@
 #include "EventBase.h"
 
 namespace cannet {
-    struct TimerRepeatable {
+    typedef std::function<void()> Task;
+
+    class TimerRepeatable {
+    public:
         int64_t at;  // current timer timeout timestamp
         int64_t interval;
         TimerId timerid;
         Task cb;
     };
 
-    struct IdleNode {
+    class IdleNode {
+    public:
         TcpConnPtr con_;
         int64_t updated_;
         TcpCallBack cb_;
     };
 
 
-    struct IdleIdImp {
+    class IdleIdImp {
+    public:
         IdleIdImp() {}
 
         typedef std::list<IdleNode>::iterator Iter;
@@ -26,7 +31,8 @@ namespace cannet {
         Iter iter_;
     };
 
-    struct EventsImp {
+    class EventsImp {
+    public:
         EventBase *base_;
         PollerBase *poller_;
         std::atomic<bool> exit_;
@@ -142,7 +148,7 @@ namespace cannet {
         timerReps_.clear();
         timers_.clear();
         idleConns_.clear();
-        for (auto recon: reconnectConns_) {  //重连的连接无法通过channel清理，因此单独清理
+        for (auto &recon: reconnectConns_) {  //重连的连接无法通过channel清理，因此单独清理
             recon->cleanup(recon);
         }
         loop_once(0);
@@ -371,10 +377,10 @@ namespace cannet {
 
     TcpConn::TcpConn()
             : base_(NULL), channel_(NULL), state_(State::Invalid), destPort_(-1), connectTimeout_(0),
-              reconnectInterval_(-1), connectedTime_(util::timeMilli()) {}
+              reconnectInterval_(-1), connectedTime_(Util::timeMilli()) {}
 
     TcpConn::~TcpConn() {
-        trace("tcp destroyed %s - %s", local_.toString().c_str(), peer_.toString().c_str());
+//        trace("tcp destroyed %s - %s", local_.toString().c_str(), peer_.toString().c_str());
         delete channel_;
     }
 
@@ -387,9 +393,9 @@ namespace cannet {
     void TcpConn::reconnect() {
         auto con = shared_from_this();
         getBase()->imp_->reconnectConns_.insert(con);
-        long long interval = reconnectInterval_ - (util::timeMilli() - connectedTime_);
+        long long interval = reconnectInterval_ - (Util::timeMilli() - connectedTime_);
         interval = interval > 0 ? interval : 0;
-        info("reconnect interval: %d will reconnect after %lld ms", reconnectInterval_, interval);
+//        info("reconnect interval: %d will reconnect after %lld ms", reconnectInterval_, interval);
         getBase()->runAfter(interval, [this, con]() {
             getBase()->imp_->reconnectConns_.erase(con);
             connect(getBase(), destHost_, (unsigned short) destPort_, connectTimeout_, localIp_);

@@ -11,6 +11,7 @@
 
 namespace cannet {
     class File {
+    public:
         static Status getContent(const std::string &filename, std::string &cont);
 
         static Status writeContent(const std::string &filename, const std::string &cont);
