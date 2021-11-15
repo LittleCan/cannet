@@ -6,8 +6,24 @@
 #include <condition_variable>
 #include <functional>
 #include <cassert>
+#include <sys/syscall.h>
+#include <sys/prctl.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 namespace cannet {
+
+    pid_t getTid();
+
+    void cacheTid();
+
+    int tid();
+
+    const char *tidString();
+
+    int tidStringLength();
+
+    const char *name();
 
     class ThreadStd {
     public:

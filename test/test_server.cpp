@@ -1,16 +1,24 @@
-#include "cannet.h"
+#include <getopt.h>
 #include <string>
+#include "EventLoop.h"
+#include "Server.h"
+#include "Logger.h"
+
+using namespace cannet;
 
 int main() {
-    cannet::EventBase base;
-    cannet::Signal::signal(SIGINT, [&] { base.exit(); });
-    cannet::TcpServerPtr server = cannet::TcpServer::startServer(&base, "", 2099);
-    if (server == nullptr) std::cout << "error";
-    server->onConnRead([](const cannet::TcpConnPtr &con) {
-        auto s = con->getInput().data();
-        std::cout << s << std::flush;
-        con->send(s);
-    });
-    base.loop();
+    int threadNum = 2;
+    int port = 8000;
+    std::string logPath = "./WebServer.log";
+
+    Logger::setLogFileName(logPath);
+// STL库在多线程上应用
+#ifndef _PTHREADS
+    LOG << "_PTHREADS is not defined !";
+#endif
+    EventLoop mainLoop;
+    Server myHTTPServer(&mainLoop, threadNum, port);
+    myHTTPServer.start();
+    mainLoop.loop();
     return 0;
 }

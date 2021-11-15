@@ -9,7 +9,6 @@ set(base_srcs
         AsyncLogger.h
         CountDownLatch.h
         CountDownLatch.cpp
-        CurrentThread.h
         AsyncLogger.cpp
         LogFile.cpp
         LogFile.h

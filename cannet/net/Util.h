@@ -1,64 +1,40 @@
 #ifndef CANNET_UTIL_H
 #define CANNET_UTIL_H
 
+
 #include <cstdlib>
-#include <cstring>
-#include <functional>
 #include <string>
-#include <utility>
+#include <errno.h>
 #include <fcntl.h>
-#include <chrono>
-#include <memory>
-#include <algorithm>
-#include <cstdarg>
-#include "Noncopyable.h"
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <signal.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <unistd.h>
 
 namespace cannet {
-    class Util {
-    public:
-        static std::string format(const char *fmt, ...);
+    ssize_t readn(int fd, void *buff, size_t n);
 
-        static int64_t timeMicro();
+    ssize_t readn(int fd, std::string &inBuffer, bool &zero);
 
-        static int64_t timeMilli() {
-            return timeMicro() / 1000;
-        }
+    ssize_t readn(int fd, std::string &inBuffer);
 
-        static int64_t steadyMicro();
+    ssize_t writen(int fd, void *buff, size_t n);
 
-        static int64_t steadyMilli() {
-            return steadyMicro() / 1000;
-        }
+    ssize_t writen(int fd, std::string &sbuff);
 
-        static std::string readableTime(time_t t);
+    void handle_for_sigpipe();
 
-        static int64_t atoi(const char *b, const char *e) {
-            return strtol(b, (char **) &e, 10);
-        }
+    int setSocketNonBlocking(int fd);
 
-        static int64_t atoi2(const char *b, const char *e) {
-            char *ne = nullptr;
-            int64_t v = strtol(b, &ne, 10);
-            return ne == e ? v : -1;
-        }
+    void setSocketNodelay(int fd);
 
-        static int64_t atoi(const char *b) {
-            return atoi(b, b + strlen(b));
-        }
+    void setSocketNoLinger(int fd);
 
-        static int addFdFlag(int fd, int flag);
-    };
+    void shutDownWR(int fd);
 
-    class ExitCaller : private noncopyable {
-    public:
-        ExitCaller(std::function<void()> &&functor) : functor_(std::move(functor)) {};
+    int socket_bind_listen(int port);
 
-        ~ExitCaller() { functor_(); }
-
-    private:
-        std::function<void()> functor_;
-    };
 }
-
-
 #endif //CANNET_UTIL_H
