@@ -1,6 +1,0 @@
-cmake_minimum_required(VERSION 3.5)
-project(cannet)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
-add_subdirectory(${PROJECT_SOURCE_DIR}/cannet/base/)
-add_subdirectory(${PROJECT_SOURCE_DIR}/cannet/net/)
-add_subdirectory(${PROJECT_SOURCE_DIR}/test)
