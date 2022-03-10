@@ -16,6 +16,7 @@ void connecttioncallback(const TcpConnectionPtr &p)
 void messagecallback(const TcpConnectionPtr &p,
                      Buffer *b)
 {
+    cout << b->retrieveAllAsString();
     auto temp = b->retrieveAllAsString();
     p->send(R"(HTTP/1.1 200 OK
 Accept-Ranges: bytes
