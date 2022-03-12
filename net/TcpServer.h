@@ -4,7 +4,7 @@
 #include <memory>
 #include <functional>
 #include <atomic>
-#include "base/Noncopyable.h"
+#include "../base/Noncopyable.h"
 #include "TcpConnection.h"
 #include "Channel.h"
 #include "CallBacks.h"

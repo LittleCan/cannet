@@ -1,9 +1,9 @@
 #ifndef CANNET_NET_EVENTLOOPTHREAD_H
 #define CANNET_NET_EVENTLOOPTHREAD_H
-#include "base/Noncopyable.h"
+#include "../base/Noncopyable.h"
 #include <mutex>
 #include <condition_variable>
-#include "base/Thread.h"
+#include "../base/Thread.h"
 namespace cannet
 {
     class EventLoop;

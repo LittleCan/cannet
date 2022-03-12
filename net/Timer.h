@@ -1,7 +1,7 @@
 #ifndef CANNET_NET_TIMER_H
 #define CANNET_NET_TIMER_H
 
-#include "base/Noncopyable.h"
+#include "../base/Noncopyable.h"
 #include <chrono>
 #include <utility>
 #include "CallBacks.h"

@@ -4,7 +4,7 @@
 #include <functional>
 #include <memory>
 #include <string>
-#include "base/Noncopyable.h"
+#include "../base/Noncopyable.h"
 
 namespace cannet
 {

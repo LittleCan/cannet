@@ -3,7 +3,7 @@
 #include <vector>
 #include <functional>
 #include <memory>
-#include "base/Noncopyable.h"
+#include "../base/Noncopyable.h"
 namespace cannet
 {
     class EventLoop;
